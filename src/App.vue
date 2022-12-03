@@ -6,20 +6,26 @@
 import CirclePattern from './components/CirclePattern.vue'
 import {ref,reactive} from 'vue';
 import VueSlider from 'vue-slider-component'
+import 'vue-slider-component/theme/default.css'
+
+const child = ref(null)
+const onClick = () => {
+  child.value.draw();
+}
 
 const state = reactive({
     height: window.innerHeight-100,//ディスプレイのサイズに動的に対応する
     width:  window.innerHeight-100,
 });
 
-const division =ref('1');
-const delta_twist =ref('5');
+const division =ref(1);
+const delta_twist =ref(5);
 const OuterCircle =ref((state.width-100)/2);
 const InnerCircle =ref((state.width-600)/2);
-const displayCircle =ref('true');
-const lineWidth =ref('0.2');
-const value =ref('1');
-const data = reactive({ value: 0 })
+const displayCircle =ref(true);
+const lineWidth =ref(0.2);
+const bardata =ref(50);
+
 </script>
 
 <template>
@@ -27,17 +33,21 @@ const data = reactive({ value: 0 })
 
   <div>
     <CirclePattern 
+    ref="child"
     v-bind:division="division" 
     v-bind:delta_twist="delta_twist"
     v-bind:OuterCircle="OuterCircle"
     v-bind:InnerCircle="InnerCircle"
     v-bind:displayCircle="displayCircle"
     v-bind:lineWidth="lineWidth"
+    v-bind:bardata="bardata"
     />
   </div>
   <div id = "controller">
     <h1>星織機</h1>
+    <h3>天体軌道を応用した幾何模様ジェネレータ</h3>
     <div>
+      //TODO 0はだめ
       <label for="division">division[deg](少数点一桁) : </label>
       <input type="text" v-model="division" placeholder="60,120,360">
     </div>
@@ -61,13 +71,9 @@ const data = reactive({ value: 0 })
       <label for="lineWidth">lineWidth : </label>
       <input type="text" v-model="lineWidth" placeholder="">
     </div>
-    <v-slider
-    dense
-    hint="Im a hint"
-    max="-100"
-    min="10"
-    readonly
-  ></v-slider>
+    <div>
+      <vue-slider @change="onClick" v-model="bardata" min=1 max=360 interval=1></vue-slider>
+    </div>
   </div>
 
 </div>

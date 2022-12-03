@@ -15,7 +15,13 @@ import { ref, reactive,onMounted, onUnmounted ,onErrorCaptured } from 'vue';
       InnerCircle: Number,
       displayCircle: Boolean,
       lineWidth: Number,
+      bardata: Number,
     });
+
+    const log = () => {
+      console.log("I am God's child")
+      console.log(props.bardata)
+    }
 
     //canvasに図形を描画する
     const draw = () => {
@@ -23,7 +29,6 @@ import { ref, reactive,onMounted, onUnmounted ,onErrorCaptured } from 'vue';
         const s = function (p5) {
         var radius_out;//外円の半径
         var radius_in;//内円の半径
-        // var division;//円の分割数
         var angle;
         var division = 0.1;//回転する速さ
         var twist;
@@ -46,12 +51,20 @@ import { ref, reactive,onMounted, onUnmounted ,onErrorCaptured } from 'vue';
           radius_in = Number(props.InnerCircle);
           division = Number(props.division);//60,120,360
           twist = 1;
-          delta_twist = Number(props.delta_twist);//0~360
+          // delta_twist = Number(props.delta_twist);//0~360
           lineWidth = parseFloat(props.lineWidth);
           angle = -90;
+          console.log(delta_twist);
         }
 
-        p5.drawOneRound = _ =>{
+        // 1フレーム（1/60秒）ごとに実行される
+        p5.draw = _ => {
+          p5.drawOneRound(props.bardata);
+          p5.noLoop();
+        }
+
+        p5.drawOneRound = (value) =>{
+          delta_twist = Number(props.bardata);//0~360
           //描画線の生成
           while (roundDecimal(angle,3) < 270.0){
             var lineInstance = new Line();
@@ -80,19 +93,16 @@ import { ref, reactive,onMounted, onUnmounted ,onErrorCaptured } from 'vue';
           LineLists.forEach((value, index, array) => {
             value.draw(p5);
           });
+
         }
 
-        // 1フレーム（1/60秒）ごとに実行される
-        p5.draw = _ => {
-          console.log("start");
-          p5.drawOneRound();
-          console.log("drawend");
-          p5.noLoop();
-          console.log("afternoloop");
-        }
       }
       var myp5 = new p5(s);// インスタンスモードとしてp5クラスを実行
     };
+    defineExpose({
+      log,
+      draw
+    })
 
     //canvasを初期化する。
     const clear = ()=>{
@@ -116,10 +126,10 @@ import { ref, reactive,onMounted, onUnmounted ,onErrorCaptured } from 'vue';
         a.click();   // 疑似的にクリック
     };
     
-    //canvasを保存する。
+    //canvasをshareする。
     const share = ()=>{
         //TODO share処理
-
+        console.log("share");
     };
 
     //既存のcanvasを削除する
@@ -138,14 +148,15 @@ import { ref, reactive,onMounted, onUnmounted ,onErrorCaptured } from 'vue';
 
     //コンポーネントのライフサイクルフック
     onMounted(() => {
-      const s = function (p5) {
-          p5.setup = _ => {
-            var canvas = p5.createCanvas(state.width, state.height)
-            canvas.parent("p5Canvas");// キャンバスを作成
-            p5.background(50);
-          }
-      }
-      var myp5 = new p5(s); // インスタンスモードとしてp5クラスを実行
+      draw();
+      // const s = function (p5) {
+      //     p5.setup = _ => {
+      //       var canvas = p5.createCanvas(state.width, state.height)
+      //       canvas.parent("p5Canvas");// キャンバスを作成
+      //       p5.background(50);
+      //     }
+      // }
+      // var myp5 = new p5(s); // インスタンスモードとしてp5クラスを実行
     });
 
     //コンポーネントのライフサイクルフック
