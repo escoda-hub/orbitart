@@ -33,17 +33,24 @@ a:hover {
   color: #535bf2;
 }
 
+@font-face {
+	font-family: 'MyFont';
+	src: url(./assets/timemachine-wa.ttf);
+}
+
 body {
   margin: 0;
   display: flex;
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  font-family: "MyFont";
 }
 
 h1 {
-  font-size: 3.2em;
+  font-size: 2.2em;
   line-height: 1.1;
+
 }
 
 button {
@@ -71,7 +78,7 @@ button:focus-visible {
 
 #app {
   max-width: 1280px;
-  margin: 0 auto;
+  margin: 5px 50px 5px;
   padding: 2rem;
   text-align: center;
 }
@@ -92,5 +99,42 @@ button:focus-visible {
 div#main{
   display: flex;
   flex-direction: row;  
+  justify-content: space-between; 
+}
+
+div#controller{
+  background-color: rgb(36, 36, 36);
+}
+
+div#circlepattern{
+  background-color: rgb(36, 36, 36);
+}
+
+div#colorPalet{
+  display: flex;
+  flex-direction: row;  
   justify-content: space-evenly; 
+  background-color: rgb(90, 89, 89);
+}
+
+div#paramsetting{
+  background-color: rgb(62, 62, 62);
+}
+
+div#spacer{
+  width: 200px;
+}
+
+.custom-dot {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  background-color: #FFAD00;
+  transition: all .3s;
+}
+.custom-dot:hover {
+  transform: rotateZ(135deg);
+}
+.custom-dot.focus {
+  border-radius: 50%;
 }

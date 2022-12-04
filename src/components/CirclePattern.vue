@@ -15,6 +15,8 @@ import { ref, reactive,onMounted, onUnmounted ,onErrorCaptured } from 'vue';
       displayCircle: Boolean,
       lineWidth: Number,
       plotportion: Number,
+      bgcolor:Object,
+      linecolor:Object,
     });
 
     //canvasに図形を描画する
@@ -40,10 +42,9 @@ import { ref, reactive,onMounted, onUnmounted ,onErrorCaptured } from 'vue';
           var canvas = p5.createCanvas(state.width, state.height)
           canvas.parent("p5Canvas");// キャンバスを作成
           p5.noStroke();// 図形の線無し
-          p5.background(50);
+          p5.background(props.bgcolor.r,props.bgcolor.g,props.bgcolor.b,(props.bgcolor.a)*255)
           radius_out = Number(props.OuterCircle);
           radius_in = Number(props.InnerCircle);
-          division = Number(props.division);
           twist = 0;
           lineWidth = parseFloat(props.lineWidth);
           angle = -90;
@@ -56,7 +57,9 @@ import { ref, reactive,onMounted, onUnmounted ,onErrorCaptured } from 'vue';
         }
 
         p5.drawOneRound = () =>{
-          plotportion = props.plotportion-1;//0~360
+          plotportion = props.plotportion;//0~360
+          division = props.division;
+
           //描画線の生成
           while (roundDecimal(angle,3) < 270.0){
             var lineInstance = new Line();
@@ -70,18 +73,18 @@ import { ref, reactive,onMounted, onUnmounted ,onErrorCaptured } from 'vue';
           }
 
           //描画処理
-          p5.background(50);
+          p5.background(props.bgcolor.r,props.bgcolor.g,props.bgcolor.b,(props.bgcolor.a)*255)
+          
           if(props.displayCircle){
             p5.noFill();
-            p5.stroke(80);//線の色
+            p5.stroke(80);//円周の色
             p5.strokeWeight(6);
             p5.ellipse(state.width/2, state.height/2, radius_out*2, radius_out*2);//外円
             p5.ellipse(state.width/2, state.height/2, radius_in*2, radius_in*2);//内円
           }
-          p5.fill(200);
-          p5.stroke( 0, 0, 0 );
+
           p5.strokeWeight(lineWidth);
-          p5.stroke(255);//line color
+          p5.stroke(props.linecolor.r,props.linecolor.g,props.linecolor.b,(props.linecolor.a)*255);//line color
           LineLists.forEach((value, index, array) => {
             value.draw(p5);
           });
@@ -101,7 +104,7 @@ import { ref, reactive,onMounted, onUnmounted ,onErrorCaptured } from 'vue';
           p5.setup = _ => {
             var canvas = p5.createCanvas(state.width, state.height)
             canvas.parent("p5Canvas");// キャンバスを作成
-            p5.background(50);
+            p5.background(props.bgcolor.r,props.bgcolor.g,props.bgcolor.b,(props.bgcolor.a)*255)
           }
       }
       var myp5 = new p5(s);// インスタンスモードとしてp5クラスを実行
@@ -109,26 +112,17 @@ import { ref, reactive,onMounted, onUnmounted ,onErrorCaptured } from 'vue';
 
       //canvasを保存する。
     const save = ()=>{
-        //TODO 保存処理
-        const a = document.createElement("p5Canvas"); // a要素の作成
-        a.href = canvas.toDataURL("image/jpeg", 0.75); // PNGなら"image/png"
-        a.download = "image.jpg";  // ファイル名のセット
-        a.click();   // 疑似的にクリック
-    };
-    
-    //canvasをshareする。
-    const share = ()=>{
-        //TODO share処理
-        console.log("share");
-    };
-
-        //canvasをshareする。
-    const del = ()=>{
-        //TODO share処理
-        console.log("delete");
-
-        // p5.clear();
-
+      // var canvas = document.getElementById(canvas_id);
+      var canvas = document.getElementsByClassName("p5Canvas");
+      //アンカータグを作成
+      var a = document.createElement('a');
+      //canvasをJPEG変換し、そのBase64文字列をhrefへセット
+      // a.href = canvas[0].toDataURL('image/jpeg', 0.85);
+      a.href = canvas[0].toDataURL('image/png');
+      //ダウンロード時のファイル名を指定
+      a.download = 'download.png';
+      //クリックイベントを発生させる
+      a.click();
     };
 
     //既存のcanvasを削除する
@@ -143,7 +137,6 @@ import { ref, reactive,onMounted, onUnmounted ,onErrorCaptured } from 'vue';
             }
           }
         }else{
-          console.log("削除するelementがない")
         }
     };
 
@@ -166,10 +159,8 @@ import { ref, reactive,onMounted, onUnmounted ,onErrorCaptured } from 'vue';
     <div class="d-flex justify-content-center" id="p5Canvas"></div>
   </div>
   <div>
-    <button @click="draw()">描画</button>
+    <!-- <button @click="draw()">描画</button> -->
     <button @click="initialize()">クリア</button>
     <button @click="save()">保存</button>
-    <button @click="share()">シェア</button>
-    <button @click="del()">delete</button>
   </div>
 </template>
