@@ -8,9 +8,9 @@ import {ref,reactive} from 'vue';
 import VueSlider from 'vue-slider-component'
 import 'vue-slider-component/theme/default.css'
 
-const child = ref(null)
-const onClick = () => {
-  child.value.draw();
+const circlepattern = ref(null)
+const update = () => {
+  circlepattern.value.draw();
 }
 
 const state = reactive({
@@ -19,12 +19,11 @@ const state = reactive({
 });
 
 const division =ref(1);
-const delta_twist =ref(5);
 const OuterCircle =ref((state.width-100)/2);
 const InnerCircle =ref((state.width-600)/2);
-const displayCircle =ref(true);
+const displayCircle =ref(false);
 const lineWidth =ref(0.2);
-const bardata =ref(50);
+const plotportion =ref(50);
 
 </script>
 
@@ -33,46 +32,43 @@ const bardata =ref(50);
 
   <div>
     <CirclePattern 
-    ref="child"
+    ref="circlepattern"
     v-bind:division="division" 
-    v-bind:delta_twist="delta_twist"
     v-bind:OuterCircle="OuterCircle"
     v-bind:InnerCircle="InnerCircle"
     v-bind:displayCircle="displayCircle"
     v-bind:lineWidth="lineWidth"
-    v-bind:bardata="bardata"
+    v-bind:plotportion="plotportion"
     />
   </div>
   <div id = "controller">
     <h1>星織機</h1>
     <h3>天体軌道を応用した幾何模様ジェネレータ</h3>
     <div>
-      //TODO 0はだめ
-      <label for="division">division[deg](少数点一桁) : </label>
-      <input type="text" v-model="division" placeholder="60,120,360">
-    </div>
-    <div>
-      <label for="delta_twist">delta_twist(0~360) : </label>
-      <input type="text" v-model="delta_twist" placeholder="0~360">
+      <label for="division">円周の分割角度 : </label>
+      <!-- <input type="text" v-model.number="division" > -->
+      <vue-slider @change="update" v-model="division" :min=0.1 :max=1 :interval=0.01></vue-slider>
     </div>
     <div>
       <label for="OuterCircle">OuterCircle : </label>
-      <input type="text" v-model="OuterCircle" placeholder="60,120,360">
+      <vue-slider @change="update" v-model="OuterCircle" :min=1 :max=(state.height/2) :interval=0.1></vue-slider>
     </div>
     <div>
       <label for="InnerCircle">InnerCircle : </label>
-      <input type="text" v-model="InnerCircle" placeholder="0~360">
+      <vue-slider @change="update" v-model="InnerCircle" :min=1 :max=(state.height/2) :interval=0.1></vue-slider>
     </div>
     <div>
       <label for="displayCircle">displayCircle</label>
-      <input type="checkbox" v-model="displayCircle">
+      <input type="checkbox" @change="update" v-model="displayCircle">
     </div>
     <div>
       <label for="lineWidth">lineWidth : </label>
-      <input type="text" v-model="lineWidth" placeholder="">
+      <!-- <input type="text" v-model.number="lineWidth" placeholder=""> -->
+      <vue-slider @change="update" v-model="lineWidth" :min=0.01 :max=1 :interval=0.01></vue-slider>
     </div>
     <div>
-      <vue-slider @change="onClick" v-model="bardata" min=1 max=360 interval=1></vue-slider>
+      <label for="lineWidth">内円と外円のプロット位置の比: </label>
+      <vue-slider @change="update" v-model="plotportion" :min=1 :max=360 :interval=1></vue-slider>
     </div>
   </div>
 
