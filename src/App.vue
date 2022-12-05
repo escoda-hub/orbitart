@@ -41,7 +41,7 @@ const InnerCircle =ref((state.width-600)/2);
 const displayCircle =ref(false);
 const lineWidth =ref(0.2);
 const plotportion =ref(50);
-const bgcolor = ref({r: 17, g: 17, b: 17, a: 1});
+const bgcolor = ref({r: 0, g: 0, b: 0, a: 0});
 const linecolor = ref({r: 211, g: 211, b: 211, a: 1});
 
 </script>
@@ -62,29 +62,42 @@ const linecolor = ref({r: 211, g: 211, b: 211, a: 1});
     v-bind:linecolor="linecolor"
     />
   </div>
-  <div id="spacer">
-    <br>
-
-  </div>
-
   <div id = "controller">
-    <h1>nicolagraph</h1>
-    <h4>天体軌道をモチーフにした幾何模様ジェネレータ</h4>
+    <div id="header">
+      <div id="title">
+          <h1>nicolagraph</h1>
+          
+      </div>
+      <h4>天体軌道をモチーフにした幾何模様ジェネレータ</h4>
+      <div id="helpbtn">
+        <button  onclick="location.href=window.open('https://note.com/')">?</button>
+      </div>
+
+    </div>
 
     <div id="paramsetting">
-      <div>
+      <div class="slider">
         <label for="division">円周の分割角度[°]</label>
-        <vue-slider @drag-end="update" @change="update" v-model="division" :min=0.1 :max=1 :interval=0.01 ></vue-slider>
+        <vue-slider
+        @dragging="update" 
+        @drag-end="update"
+        v-model="division" 
+        :process-style="{ backgroundColor: 'rgb(21,94,107)' }"
+        :min=0.1 
+        :max=1 
+        :interval=0.01 >
+        <template v-slot:dot="{ focus }">
+          <div :class="['custom-dot', { focus }]"></div>
+        </template>
+        </vue-slider>
       </div>
-      <div>
-        <label for="lineWidth">内円と外円のプロット位置の比</label>
+      <div class="slider">
+        <label for="lineWidth">内円と外円の公転周期の比</label>
         <vue-slider 
         @dragging="update" 
         @drag-end="update"
-
         v-model="plotportion" 
-        :tooltip="'none'"
-        :process-style="{ backgroundColor: 'orange' }"
+        :process-style="{ backgroundColor: 'rgb(21,94,107)' }"
         :min=1 
         :max=360 
         :interval=1>
@@ -93,25 +106,57 @@ const linecolor = ref({r: 211, g: 211, b: 211, a: 1});
         </template>
       </vue-slider>
       </div>
-      <div>
+      <div class="slider">
         <label for="OuterCircle">外円の直径[px]</label>
-        <vue-slider @drag-end="update" @change="update" v-model="OuterCircle" :min=1 :max=(state.height/2) :interval=0.1></vue-slider>
+        <vue-slider 
+        @dragging="update" 
+        @drag-end="update"
+        v-model="OuterCircle" 
+        :process-style="{ backgroundColor: 'rgb(21,94,107)' }"
+        :min=1 
+        :max=(state.height/2) 
+        :interval=0.1>
+        <template v-slot:dot="{ focus }">
+          <div :class="['custom-dot', { focus }]"></div>
+        </template>
+      </vue-slider>
       </div>
-      <div>
+      <div class="slider">
         <label for="InnerCircle">内円の直径[px]</label>
-        <vue-slider @drag-end="update" @change="update" v-model="InnerCircle" :min=1 :max=(state.height/2) :interval=0.1></vue-slider>
+        <vue-slider 
+        @dragging="update" 
+        @drag-end="update"
+        v-model="InnerCircle" 
+        :process-style="{ backgroundColor: 'rgb(21,94,107)' }"
+        :min=1 
+        :max=(state.height/2) 
+        :interval=0.1>
+        <template v-slot:dot="{ focus }">
+          <div :class="['custom-dot', { focus }]"></div>
+        </template>
+      </vue-slider>
       </div>
-      <div>
+      <div class="slider">
         <label for="lineWidth">線の太さ</label>
-        <vue-slider @drag-end="update" @change="update" v-model="lineWidth" :min=0.01 :max=1 :interval=0.01></vue-slider>
+        <vue-slider 
+        @dragging="update" 
+        @drag-end="update"
+        v-model="lineWidth" 
+        :process-style="{ backgroundColor: 'rgb(21,94,107)' }"
+        :min=0.01 
+        :max=1 
+        :interval=0.01>
+        <template v-slot:dot="{ focus }">
+          <div :class="['custom-dot', { focus }]"></div>
+        </template>
+      </vue-slider>
       </div>
       <div>
-        <label for="displayCircle">作図時の補助図形の表示</label>
         <input type="checkbox" @change="update" v-model="displayCircle">
+        <label for="displayCircle">作図時の補助図形の表示</label>
       </div>
     </div>
 
-    <br>
     <div id="colorPalet">
       <div :style="{background: color}">
         <label for="ColorPicker">背景色</label>
