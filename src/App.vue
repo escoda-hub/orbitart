@@ -69,9 +69,9 @@ const linecolor = ref({r: 211, g: 211, b: 211, a: 1});
           
       </div>
       <h4>天体軌道をモチーフにした幾何模様ジェネレータ</h4>
-      <div id="helpbtn">
+      <!-- <div id="helpbtn">
         <button  onclick="location.href=window.open('https://note.com/')">?</button>
-      </div>
+      </div> -->
 
     </div>
 
