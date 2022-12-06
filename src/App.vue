@@ -195,21 +195,20 @@ const linecolor = ref({r: 211, g: 211, b: 211, a: 1});
       -->
       </div>
     </div>
+    <footer>
+      <div>
+          <p class="copyright">&copy; 2022 nicolagraph</p>
+      </div>
+      <div>
+          <a href="https://twitter.com/rey88020766">contanct</a>
+      </div>
+    </footer>
 
   </div>
 </div>
+
 </template>
 
 <style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
+
 </style>
