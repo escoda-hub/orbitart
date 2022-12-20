@@ -199,9 +199,6 @@ const linecolor = ref({r: 211, g: 211, b: 211, a: 1});
       <div>
           <p class="copyright">&copy; 2022 nicolagraph</p>
       </div>
-      <div>
-          <a href="https://twitter.com/rey88020766">contanct</a>
-      </div>
     </footer>
 
   </div>
